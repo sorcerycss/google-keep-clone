@@ -1,9 +1,13 @@
 class App {
     constructor() {
         console.log('app works!');
+
+        this.notes = [];
+
         // use $ to recognize HTML element as compared to data
         this.$form = document.querySelector('#form');
         this.$noteTitle = document.querySelector('#note-title');
+        this.$noteText = document.querySelector('#note-text');
         this.$formButtons = document.querySelector('#form-buttons');
 
         this.addEventListeners(); // runs when our app starts up
@@ -12,6 +16,17 @@ class App {
     addEventListeners() {
         document.body.addEventListener('click', event => {
             this.handleFormClick(event);
+        });
+
+        // add note submit logic
+        this.$form.addEventListener('submit', event => {
+            event.preventDefault();
+            const title = this.$noteTitle.value;
+            const text = this.$noteText.value;
+            const hasNote = title || text;
+            if (hasNote) {
+                this.addNote({ title, text});
+            }
         });
     }
 
@@ -38,6 +53,18 @@ class App {
         this.$noteTitle.style.display = 'none';
         this.$formButtons.style.display = 'none';
     }
+
+    addNote(note) {
+        const newNote = {
+            title: note.title,
+            text: note.text,
+            color: 'white',
+            id: this.notes.length > 0 ?
+                this.notes[this.notes.length - 1].id + 1 : 1
+        };
+        this.notes = [...this.notes, newNote];
+        console.log(this.notes);
+    }
 }
 
-new App()
+new App();
